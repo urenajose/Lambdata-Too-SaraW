@@ -38,32 +38,32 @@ class My_Ready_Frame():
         default is all.
         """
 
-  # surpress warning comparing pd objects to np.nan
-  warnings.simplefilter(action='ignore', category=FutureWarning)
-  dfn = df.applymap(lambda x: x.strip() if type(x) == str else x)
-  columns = list(df.columns)
-  options = [npnan, zero, qmark, missing]
-  null_name = ['NaN', 0, '?', 'Missing']
-  keeper = []
-  index = []
+        # surpress warning comparing pd objects to np.nan
+        warnings.simplefilter(action='ignore', category=FutureWarning)
+        dfn = df.applymap(lambda x: x.strip() if type(x) == str else x)
+        columns = list(df.columns)
+        options = [npnan, zero, qmark, missing]
+        null_name = ['NaN', 0, '?', 'Missing']
+        keeper = []
+        index = []
 
-  for p in range(4):
-    if options[p] == True:
-      index.append(null_name[p])
-      n_c = []
-      for i in columns:
-        null_function = [
-                         dfn[i].isnull().sum(),
-                         (sum(dfn[i] == '0')+sum(dfn[i] == 0)),
-                         sum(dfn[i] == '?'),
-                         (sum(dfn[i] == '')+sum(dfn[i] == None))
-                         ]
-        nan_count = null_function[p]
-        n_c.append(nan_count)
-      keeper.append(n_c)
+        for p in range(4):
+            if options[p] == True:
+                index.append(null_name[p])
+                n_c = []
+            for i in columns:
+                null_function = [
+                                dfn[i].isnull().sum(),
+                                (sum(dfn[i] == '0')+sum(dfn[i] == 0)),
+                                sum(dfn[i] == '?'),
+                                (sum(dfn[i] == '')+sum(dfn[i] == None))
+                                ]
+                nan_count = null_function[p]
+                n_c.append(nan_count)
+            keeper.append(n_c)
 
-  null_count = pd.DataFrame(data=keeper, index=index, columns=columns)
-  return (null_count)
+        null_count = pd.DataFrame(data=keeper, index=index, columns=columns)
+        return (null_count)
 
 
 
