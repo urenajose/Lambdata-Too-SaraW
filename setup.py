@@ -14,8 +14,8 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="mylambdatatoo",
-    version="0.0.2",
-    author="saraw",
+    version="0.0.3",
+    author="SaraWestWA",
     description="A collection of Data Science helper functions",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
