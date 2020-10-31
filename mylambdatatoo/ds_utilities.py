@@ -1,47 +1,40 @@
-"""
+'''
 A collection of data science utility functions.
-
-The function null_counts counts various forms of null values in a dataframe.
-
-The MyReadyFrame class is used to examine and clean dataframes.
-"""
+'''
 
 import warnings
-
 import pandas as pd
 import numpy as np
 
-
-
-
 class MyReadyFrame():
-    """
-    Param is a dataframe, can have both catagorical and numeric data
-    """
-    def __init__(self):
-        """
-        A somewhat strange class, defined only to examine dataframes.
-        """
+    '''
+    The MyReadyFrame class is used to examine and clean dataframes.
 
-    def null_counts(self, npnan=True, zero=True, qmark=True, missing=True):
-        """
-        Param (self = dataframe, npnan=True(default),zero=True(default),
-        qmark=True(default), missing=True(default)).
+    Param frame is a dataframe which can have both catagorical and numeric data.
+    Other attributes describe possible nan values in the frame.
+    '''
 
-        Function returns a dataframe of counts for specified null values and 0,
-        includes a total column.
-        """
-
+    def __init__(self, frame, npnan=True, zero=True, qmark=True, missing=True):
+        self.frame = frame
         self.npnan = npnan
         self.zero = zero
         self.qmark = qmark
         self.missing = missing
 
+    def null_counts(self):
+        '''
+        Param MyReadyFrame object, status of npnan, zero, qmark, and missing
+        determine which null values are counted.
+
+        Method returns a dataframe of counts for specified null values and 0,
+        includes a total column.
+        '''
+
         # surpress warning comparing pd objects to np.nan
         warnings.simplefilter(action='ignore', category=FutureWarning)
-        self = self.applymap(lambda x: x.strip() if isinstance(x, str) else x)
-        columns = list(self.columns)
-        options = [npnan, zero, qmark, missing]
+        df_null = self.frame.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+        columns = list(df_null.columns)
+        options = [self.npnan, self.zero, self.qmark, self.missing]
         null_name = ['NaN', 0, '?', 'Missing']
         keeper = []
         index = []
@@ -52,10 +45,10 @@ class MyReadyFrame():
                 n_c = []
             for i in columns:
                 null_function = [
-                                self[i].isnull().sum(),
-                                (sum(self[i] == '0') + sum(self[i] == 0)),
-                                sum(self[i] == '?'),
-                                sum(self[i] == '')
+                                df_null[i].isnull().sum(),
+                                (sum(df_null[i] == '0') + sum(df_null[i] == 0)),
+                                sum(df_null[i] == '?'),
+                                sum(df_null[i] == '')
                                 ]
                 nan_count = null_function[j]
                 n_c.append(nan_count)
@@ -66,19 +59,18 @@ class MyReadyFrame():
         return null_count
 
     def clean_frame(self):
-        """
-        Param is a dataframe, can have both catagorical and numeric data
+        '''
+        Param MyReadyFrame object.
 
         Method returns the dataframe with leading and trailing zeros removed;
-        '?','', and empty cells replaced with NaN, dtype changed to float
-        if possible.
-        """
+        '?','', and empty cells replaced with NaN, dtype changed to float if possible.
+        '''
 
-        self = self.applymap(lambda x: x.strip() if isinstance(x, str) else x)
-        self = self.applymap(lambda x: np.nan if isinstance(x, str) and x == '' or
+        self.frame = (self.frame).applymap(lambda x: x.strip() if isinstance(x, str) else x)
+        self.frame = (self.frame).applymap(lambda x: np.nan if isinstance(x, str) and x == '' or
                          x is None or x == '?' else x)
-        self.apply(pd.to_numeric, errors='ignore')
-        return self
+        self.frame.apply(pd.to_numeric, errors='ignore')
+        return self.frame
 
 
 if __name__ == '__main__':
@@ -94,9 +86,11 @@ if __name__ == '__main__':
 
     names = ['int_a', 'int_b', 'str_a', 'str_b', 'fl_a', 'fl_b']
 
-    dft = pd.DataFrame(data, index=names).T
+    df = pd.DataFrame(data, index=names).T
 
-    print(dft,'\n')
+# Make class variable
+    dft = MyReadyFrame(df)
+    print(dft.frame,'\n')
 
 # Simple Test for null_counts function,
     z = MyReadyFrame.null_counts(dft)

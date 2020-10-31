@@ -1,6 +1,6 @@
-"""
+'''
 lambdata - a collection of Data Science helper functions
-"""
+'''
 
 import setuptools
 
@@ -14,7 +14,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="mylambdatatoo",
-    version="0.0.3",
+    version="0.0.4",
     author="SaraWestWA",
     description="A collection of Data Science helper functions",
     long_description=LONG_DESCRIPTION,
