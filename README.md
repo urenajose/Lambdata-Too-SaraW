@@ -7,7 +7,7 @@ null values, and replace values with NaN.
 ## Installation
 
 To access Lambdata-Too-SaraW
-pip install - FILL THIS LATER
+pip install -i https://test.pypi.org/simple/ mylambdatatoo==0.0.6
 
 ## Usage
 
