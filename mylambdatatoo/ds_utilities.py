@@ -1,20 +1,19 @@
-'''
-A collection of data science utility functions.
-'''
+"""A collection of data science utility functions."""
 
 import warnings
 import pandas as pd
 import numpy as np
 
 class MyReadyFrame():
-    '''
-    The MyReadyFrame class is used to examine and clean dataframes.
-
-    Param frame is a dataframe which can have both catagorical and numeric data.
-    Other attributes describe possible nan values in the frame.
-    '''
+    """The MyReadyFrame class is used to examine and clean dataframes."""
 
     def __init__(self, frame, npnan=True, zero=True, qmark=True, missing=True):
+        """
+        Param 'frame' is a dataframe which can have both catagorical and numeric
+        data. Other attributes describe possible null values in the frame.
+
+        Class exists to examine and clean dataframes.
+        """
         self.frame = frame
         self.npnan = npnan
         self.zero = zero
@@ -22,14 +21,13 @@ class MyReadyFrame():
         self.missing = missing
 
     def null_counts(self):
-        '''
+        """
         Param MyReadyFrame object, status of npnan, zero, qmark, and missing
         determine which null values are counted.
 
         Method returns a dataframe of counts for specified null values and 0,
         includes a total column.
-        '''
-
+        """
         # surpress warning comparing pd objects to np.nan
         warnings.simplefilter(action='ignore', category=FutureWarning)
         df_null = self.frame.applymap(lambda x: x.strip() if isinstance(x, str) else x)
@@ -59,13 +57,12 @@ class MyReadyFrame():
         return null_count
 
     def clean_frame(self):
-        '''
+        """
         Param MyReadyFrame object.
 
         Method returns the dataframe with leading and trailing zeros removed;
         '?','', and empty cells replaced with NaN, dtype changed to float if possible.
-        '''
-
+        """
         self.frame = (self.frame).applymap(lambda x: x.strip() if isinstance(x, str) else x)
         self.frame = (self.frame).applymap(lambda x: np.nan if isinstance(x, str) and x == '' or
                          x is None or x == '?' else x)
@@ -76,7 +73,6 @@ class MyReadyFrame():
 if __name__ == '__main__':
 
     # Setup DataFrame to test MyReadyFrame methods
-
     data = ([[1, '', 1, 4, np.nan, 6, '0', 2],
             [2, 2, 1, 0, 1, 6, 6, 2],
             ['0', 'x', '? ', 'x', '  ', 0, 'x'],
